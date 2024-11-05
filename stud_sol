@@ -1,0 +1,36 @@
+pragma solidity ^0.8.0;
+
+contract StudentRegistory{
+    struct Student{
+        string name;
+        uint256 age;
+    }
+
+    Student[] private students;
+
+    event receivedEther(address indexed sender,uint256 value);
+
+    receive() external payable{
+        emit receivedEther(msg.sender,msg.value);
+
+    }
+
+    fallback() external payable{
+        emit receivedEther(msg.sender,msg.value);
+    }
+
+    function addstudent(string memory name,uint256 age) public{
+        students.push(Student(name,age));
+
+    }
+
+    function getstudent(uint256 index) public view returns(string memory name,uint256){
+        require(index < students.length,"student not found");
+        return (students[index].name,students[index].age);
+    }
+
+    function getstudcount() public view returns(uint256) {
+        return students.length;
+    }
+    
+}
